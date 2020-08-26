@@ -1,0 +1,27 @@
+# Spin up the Mediator agent
+#
+version: '3.2'
+
+networks:
+    agency-network:
+        external: true
+
+services:
+    mediator-agent:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - ASPNETCORE_URLS=http://+:80
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ENDPOINT_HOST=${HOST1:-https://ec2.protocol-dev.kiva.org}
+        image: mediator-agent
+        container_name: mediator-agent
+        working_dir: /app
+        ports:
+            - "80:80"
+        expose:
+            - "80"
+        networks:
+            - agency-network
+        tty: true
